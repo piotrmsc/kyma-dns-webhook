@@ -47,8 +47,7 @@ func PresentHandler() http.Handler {
 
 		req, err := getDNSReq(r.Body)
 		if err != nil {
-			//TODO error handling
-			fmt.Printf("could not get request body: %v", err)
+			http.Error(w, fmt.Sprintf("could not get request body: %v", err), http.StatusBadRequest)
 		}
 
 		err = provider.Present(req.Domain, req.Token, req.KeyAuth)
@@ -76,8 +75,7 @@ func CleanupHandler() http.Handler {
 
 		req, err := getDNSReq(r.Body)
 		if err != nil {
-			//TODO error handling
-			fmt.Printf("could not get request body: %v", err)
+			http.Error(w, fmt.Sprintf("could not get request body: %v", err), http.StatusBadRequest)
 		}
 
 		err = provider.CleanUp(req.Domain, req.Token, req.KeyAuth)
