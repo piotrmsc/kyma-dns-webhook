@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"github.com/kyma-incubator/kyma-dns-webhook/internal"
 )
 
 func main() {
-	fmt.Println("hello there!")
+	//TODO env handling
+	//GCE_PROJECT & GCE_SERVICE_ACCOUNT_FILE for gcloud
+
 	internal.RunServer()
 }
