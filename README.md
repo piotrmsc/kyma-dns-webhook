@@ -7,7 +7,12 @@ The Kyma DNS Webhook is a component that can be used with [Cert Manager](https:/
 
  `docker build -f Dockerfile.webhook . `
  
- ## Sample Issuer and Cert CR for cert-manager
+## Deploy webhook on a cluster
+
+Run this command to install webhook on a cluster, note it should be installed in the same namespace as cert-manager. In our case it's `istio-system` (at least for now)
+
+``` helm install --namespace istio-system ./deploy/kyma-dns-webhook  --name kyma-dns-webhook ```
+## Sample Issuer and Cert CR for cert-manager
  
  ```
  apiVersion: certmanager.k8s.io/v1alpha1
