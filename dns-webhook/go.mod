@@ -3,6 +3,7 @@ module github.com/kyma-incubator/kyma-dns-webhook/dns-webhook
 go 1.13
 
 require (
+	github.com/avast/retry-go v2.4.1+incompatible
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/jetstack/cert-manager v0.8.0-alpha.0
 

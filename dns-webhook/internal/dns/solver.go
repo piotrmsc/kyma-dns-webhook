@@ -10,11 +10,12 @@ import (
 // Solver implements `github.com/jetstack/cert-manager/pkg/acme/webhook.Solver`
 // In order to delegate DNS challenge to DNS client deployed in different namespace/k8s cluster.
 type Solver struct {
+	dnsClient DNSChallengeClient
 }
 
 // NewSolver returned initialied Solver
-func NewSolver() webhook.Solver {
-	return &Solver{}
+func NewSolver(dnsClient DNSChallengeClient) webhook.Solver {
+	return &Solver{dnsClient:dnsClient}
 }
 
 //Name is used as the name for this DNS solver when referencing it on the ACME
@@ -26,14 +27,13 @@ func (s *Solver) Name() string {
 func (s *Solver) Present(cr *v1alpha1.ChallengeRequest) error {
 	log.Info("DNS Challenge Present ")
 
-	//TODO @piotrmsc add rest client here to communicate with DNS client in order to add TXT record
-	return nil
+	return s.dnsClient.Present(cr.DNSName, cr.Key)
 }
 
 func (s *Solver) CleanUp(cr *v1alpha1.ChallengeRequest) error {
+	log.Info("DNS Challenge CleanUp ")
 
-	//TODO @piotrmsc add rest communication here to perform cleanup
-	return nil
+	return s.dnsClient.CleanUp(cr.DNSName, cr.Key)
 }
 
 func (s *Solver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {

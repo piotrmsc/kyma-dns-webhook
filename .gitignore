@@ -16,4 +16,4 @@
 *~
 
 *.json
-/webhook
+/dns-webhook/webhook
