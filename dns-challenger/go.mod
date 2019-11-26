@@ -8,4 +8,4 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 )
 
-replace github.com/kyma-incubator/kyma-dns-webhook/dns-proxy => ./dns-proxy
+replace github.com/kyma-incubator/kyma-dns-webhook/dns-challenger => ./dns-challenger

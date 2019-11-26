@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "dns-challenger.fullname" . }}
+  labels:
+    app: {{ include "dns-challenger.name" . }}
+    chart: {{ include "dns-challenger.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "dns-challenger.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dns-challenger.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+        - name: {{ include "dns-challenger.name" . }}-secrets-volume
+          secret:
+          secretName: {{ include "dns-challenger.fullname" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: GCE_PROJECT
+              value: {{ .Values.gcloud.providerName }}
+            - name: GCE_SERVICE_ACCOUNT_FILE
+              value: "file:///etc/secrets/gcloud-dns-admin.json"
+          volumeMounts:
+            - name: {{ include "dns-challenger.name" . }}-secrets-volume
+              mountPath: /etc/secrets
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 9096
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

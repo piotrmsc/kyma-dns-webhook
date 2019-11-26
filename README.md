@@ -2,12 +2,26 @@
 
 The Kyma DNS Webhook is a component that can be used with [Cert Manager](https://cert-manager.netlify.com/).
 
+## DNS Challenger
+
+DNS Challenger is a component responsible for performing DNS challenges in GCP.
+
+### Build DNS Challenger
+
+`docker build -f dns-challenger/Dockerfile .`
+
+### DNS Challenger environment variables
+
+Application needs following variables defined:
+- `GCE_PROJECT` - name of Google Cloud Project
+- `GCE_SERVICE_ACCOUNT_FILE` - json file containing GCP Service Account key with DNS Admin role
+
 //TODO @piotrmsc describe repo, configuration, how to build & test
 ## Build DNS webhook
 
  `docker build -f Dockerfile.webhook . `
  
- ## Sample Issuer and Cert CR for cert-manager
+### Sample Issuer and Cert CR for cert-manager
  
  ```
 apiVersion: certmanager.k8s.io/v1alpha1
