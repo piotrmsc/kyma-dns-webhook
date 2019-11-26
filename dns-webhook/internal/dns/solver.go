@@ -15,7 +15,7 @@ type Solver struct {
 
 // NewSolver returned initialied Solver
 func NewSolver(dnsClient DNSChallengeClient) webhook.Solver {
-	return &Solver{dnsClient:dnsClient}
+	return &Solver{dnsClient: dnsClient}
 }
 
 //Name is used as the name for this DNS solver when referencing it on the ACME

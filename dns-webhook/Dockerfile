@@ -3,19 +3,23 @@ FROM golang:1.13.4 as builder
 
 WORKDIR /dns-webhook
 
-# Copy the go source
-COPY dns-webhook/ .
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+ENV GO111MODULE=on
 
-RUN ls
+# Copy the go source
+COPY . .
+
 # Fetch dependencies
 RUN go mod download
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o webhook ./cmd/webhook/main.go
+RUN go build -a -o dns-webhook ./cmd/webhook/main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:latest
 WORKDIR /
 COPY --from=builder /dns-webhook .
-ENTRYPOINT ["/webhook"]
+ENTRYPOINT ["/dns-webhook"]
