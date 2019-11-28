@@ -14,7 +14,7 @@ import (
 type dnsReq struct {
 	Domain  string `json:"domain"`
 	Token   string `json:"token"`
-	KeyAuth string `json:"keyauth"`
+	KeyAuth string `json:"keyAuth"`
 }
 
 func getDNSReq(reqBody io.ReadCloser) (*dnsReq, error) {
@@ -56,7 +56,7 @@ func PresentHandler() http.Handler {
 			http.Error(w, fmt.Sprintf("could not get request body: %v", err), http.StatusBadRequest)
 		}
 
-		log.Printf("DNS REQ : %v", *req)
+		log.Printf("DNS REQ : %+v", *req)
 
 		err = provider.Present(req.Domain, req.Token, req.KeyAuth)
 		if err != nil {
