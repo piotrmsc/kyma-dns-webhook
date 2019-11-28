@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: eu.gcr.io/kyma-project/incubator/pr
   name: dns-challenger
-  tag: "PR-14"
+  tag: "PR-15"
   pullPolicy: Always
 
 nameOverride: ""
