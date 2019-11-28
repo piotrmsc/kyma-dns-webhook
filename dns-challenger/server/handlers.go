@@ -64,6 +64,10 @@ func PresentHandler() http.Handler {
 			http.Error(w, fmt.Sprintf("present req failed: %v", err), http.StatusServiceUnavailable)
 		}
 
+
+		log.Println("After Presenting")
+
+
 		return
 	})
 }

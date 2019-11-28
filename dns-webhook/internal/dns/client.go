@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/avast/retry-go"
+	"log"
 	"net/http"
 )
 
@@ -37,7 +38,13 @@ func newHttpClient(skipVerify bool) *http.Client {
 }
 
 func (c dnsChallengeClient) Present(domain string, keyAuth string) error {
-	return c.dnsChallengeReq("present", domain, keyAuth)
+	err := c.dnsChallengeReq("present", domain, keyAuth)
+
+	if err != nil {
+		log.Println("Error while communicating with dns-challenger : "+ err.Error())
+	}
+	log.Println("Finish present")
+	return err
 }
 
 func (c dnsChallengeClient) CleanUp(domain string, keyAuth string) error {
@@ -65,7 +72,8 @@ func getReqBody(domain string, keyAuth string) ([]byte, error) {
 func (c dnsChallengeClient) postWithRetry(endpoint string, body []byte) error {
 	return retry.Do(func() error {
 
-		_, postErr := c.httpClient.Post(endpoint, "application/json", bytes.NewBuffer(body))
+		resp, postErr := c.httpClient.Post(endpoint, "application/json", bytes.NewBuffer(body))
+		log.Printf("status : %d ",resp.StatusCode)
 		if postErr != nil {
 			return postErr
 		}
