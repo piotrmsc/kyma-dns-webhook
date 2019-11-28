@@ -19,7 +19,8 @@ RUN go build -a -o dns-challenger ./cmd/server/main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:latest
+# the debug image has busybox shell added
+FROM gcr.io/distroless/base:debug
 WORKDIR /
-COPY --from=builder /dns-challenger .
+COPY --from=builder /dns-challenger/dns-challenger .
 ENTRYPOINT ["/dns-challenger"]

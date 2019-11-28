@@ -1,0 +1,38 @@
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    email: admin@kyma-project.io
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    dns01:
+      providers:
+        - name: kyma-dns
+          webhook:
+            groupName: acme.kyma-project.io
+            solverName: kyma-dns                        
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: sel-letsencrypt-crt
+spec:
+  secretName: example-com-tls
+  commonName: example.com
+  dnsNames:
+  - example.com
+  - www.example.com
+  issuerRef:
+    name: letsencrypt-staging
+    kind: Issuer
+  acme:
+    config:
+      - dns01:
+          provider: kyma-dns
+        domains:
+          - example.com
+          - www.example.com

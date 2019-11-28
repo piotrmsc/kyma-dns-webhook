@@ -22,16 +22,16 @@ spec:
       volumes:
         - name: {{ include "dns-challenger.name" . }}-secrets-volume
           secret:
-          secretName: {{ include "dns-challenger.fullname" . }}
+            secretName: {{ include "dns-challenger.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: GCE_PROJECT
               value: {{ .Values.gcloud.providerName }}
             - name: GCE_SERVICE_ACCOUNT_FILE
-              value: "file:///etc/secrets/gcloud-dns-admin.json"
+              value: "/etc/secrets/gcloud-dns-admin.json"
           volumeMounts:
             - name: {{ include "dns-challenger.name" . }}-secrets-volume
               mountPath: /etc/secrets

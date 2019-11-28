@@ -5,9 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: madziq/dns-challenger
-  tag: latest
-  pullPolicy: IfNotPresent
+  repository: eu.gcr.io/kyma-project/incubator/pr
+  name: dns-challenger
+  tag: "PR-14"
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""

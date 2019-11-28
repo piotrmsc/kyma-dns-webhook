@@ -1,0 +1,20 @@
+config:
+  groupName: acme.kyma-project.io
+  dnsChallengeAddress: "http://dns-challenger.cert-manager.svc.cluster.local"
+
+image:
+  repository: eu.gcr.io/kyma-project/incubator/pr
+  name: dns-webhook
+  tag: "PR-14"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 443
+
+nameOverride: ""
+fullnameOverride: ""
+
+certManager:
+  namespace: cert-manager
+  serviceAccountName: cert-manager

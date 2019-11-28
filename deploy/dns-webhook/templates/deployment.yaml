@@ -1,35 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kyma-dns-webhook.fullname" . }}
+  name: {{ include "dns-webhook.fullname" . }}
   labels:
-    app: {{ include "kyma-dns-webhook.name" . }}
-    chart: {{ include "kyma-dns-webhook.chart" . }}
+    app: {{ include "dns-webhook.name" . }}
+    chart: {{ include "dns-webhook.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "kyma-dns-webhook.name" . }}
+      app: {{ include "dns-webhook.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "kyma-dns-webhook.name" . }}
+        app: {{ include "dns-webhook.name" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ include "kyma-dns-webhook.fullname" . }}
+      serviceAccountName: {{ include "dns-webhook.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - --tls-cert-file=/tls/tls.crt
             - --tls-private-key-file=/tls/tls.key
           env:
             - name: GROUP_NAME
-              value: {{ .Values.groupName | quote }}
+              value: {{ .Values.config.groupName | quote }}
+            - name: DNS_CHALLENGE_ADDRESS
+              value: {{ .Values.config.dnsChallengeAddress | quote }}
           ports:
             - name: https
               containerPort: 443
@@ -53,7 +55,7 @@ spec:
       volumes:
         - name: certs
           secret:
-            secretName: {{ include "kyma-dns-webhook.servingCertificate" . }}
+            secretName: {{ include "dns-webhook.servingCertificate" . }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

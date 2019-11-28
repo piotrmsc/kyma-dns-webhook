@@ -26,14 +26,20 @@ func (s *Solver) Name() string {
 
 func (s *Solver) Present(cr *v1alpha1.ChallengeRequest) error {
 	log.Info("DNS Challenge Present ")
-
-	return s.dnsClient.Present(cr.DNSName, cr.Key)
+	err := s.dnsClient.Present(cr.DNSName, cr.Key)
+	if err != nil {
+		log.Error(err)
+	}
+	return err
 }
 
 func (s *Solver) CleanUp(cr *v1alpha1.ChallengeRequest) error {
 	log.Info("DNS Challenge CleanUp ")
-
-	return s.dnsClient.CleanUp(cr.DNSName, cr.Key)
+	err := s.dnsClient.CleanUp(cr.DNSName, cr.Key)
+	if err != nil {
+		log.Error(err)
+	}
+	return err
 }
 
 func (s *Solver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {

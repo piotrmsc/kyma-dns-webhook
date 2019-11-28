@@ -19,7 +19,8 @@ RUN go build -a -o dns-webhook ./cmd/webhook/main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:latest
+# the debug image has busybox shell added
+FROM gcr.io/distroless/base:debug
 WORKDIR /
-COPY --from=builder /dns-webhook .
+COPY --from=builder /dns-webhook/dns-webhook .
 ENTRYPOINT ["/dns-webhook"]

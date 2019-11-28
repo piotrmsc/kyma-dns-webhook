@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "kyma-dns-webhook.name" -}}
+{{- define "dns-webhook.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "kyma-dns-webhook.fullname" -}}
+{{- define "dns-webhook.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,22 +27,22 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "kyma-dns-webhook.chart" -}}
+{{- define "dns-webhook.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "kyma-dns-webhook.selfSignedIssuer" -}}
-{{ printf "%s-selfsign" (include "kyma-dns-webhook.fullname" .) }}
+{{- define "dns-webhook.selfSignedIssuer" -}}
+{{ printf "%s-selfsign" (include "dns-webhook.fullname" .) }}
 {{- end -}}
 
-{{- define "kyma-dns-webhook.rootCAIssuer" -}}
-{{ printf "%s-ca" (include "kyma-dns-webhook.fullname" .) }}
+{{- define "dns-webhook.rootCAIssuer" -}}
+{{ printf "%s-ca" (include "dns-webhook.fullname" .) }}
 {{- end -}}
 
-{{- define "kyma-dns-webhook.rootCACertificate" -}}
-{{ printf "%s-ca" (include "kyma-dns-webhook.fullname" .) }}
+{{- define "dns-webhook.rootCACertificate" -}}
+{{ printf "%s-ca" (include "dns-webhook.fullname" .) }}
 {{- end -}}
 
-{{- define "kyma-dns-webhook.servingCertificate" -}}
-{{ printf "%s-webhook-tls" (include "kyma-dns-webhook.fullname" .) }}
+{{- define "dns-webhook.servingCertificate" -}}
+{{ printf "%s-webhook-tls" (include "dns-webhook.fullname" .) }}
 {{- end -}}
